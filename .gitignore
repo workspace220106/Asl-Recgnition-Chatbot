@@ -25,3 +25,8 @@ error.log
 # Editor settings
 .vscode/
 .idea/
+
+# Document files
+*.pdf
+*.pptx
+*.ppt
