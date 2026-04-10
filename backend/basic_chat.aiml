@@ -1,0 +1,48 @@
+<aiml>
+
+<category>
+<pattern>HELLO</pattern>
+<template>Hello! How are you?</template>
+</category>
+
+<category>
+<pattern>SORRY</pattern>
+<template>It's okay 😊</template>
+</category>
+
+<category>
+<pattern>PLEASE</pattern>
+<template>Sure! How can I help you?</template>
+</category>
+
+<category>
+<pattern>A</pattern>
+<template>You signed letter A</template>
+</category>
+
+<category>
+<pattern>B</pattern>
+<template>You signed letter B</template>
+</category>
+
+<category>
+<pattern>C</pattern>
+<template>You signed letter C</template>
+</category>
+
+<category>
+<pattern>D</pattern>
+<template>You signed letter D</template>
+</category>
+
+<category>
+<pattern>E</pattern>
+<template>You signed letter E</template>
+</category>
+
+<category>
+<pattern>F</pattern>
+<template>You signed letter F</template>
+</category>
+
+</aiml>

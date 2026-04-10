@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ASL Recognition + Chatbot</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 8px 18px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+
+        img {
+            margin-top: 12px;
+            width: 200px;
+            border-radius: 8px;
+        }
+
+        .result {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        #chatbox {
+            height: 200px;
+            overflow-y: auto;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        #msg {
+            width: 70%;
+            padding: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 🔵 ASL Prediction Card -->
+    <div class="card">
+        <h2>ASL Sign Recognition</h2>
+
+        <input type="file" id="imageInput" accept="image/*"><br>
+        <button onclick="predict()">Predict</button>
+
+        <br>
+        <img id="preview">
+
+        <div class="result" id="result"></div>
+    </div>
+
+
+    <!-- 🔵 Chatbot Card -->
+    <div class="card">
+        <h2>Chatbot Assistant</h2>
+
+        <div id="chatbox"></div>
+
+        <input id="msg" placeholder="Type message...">
+        <button onclick="sendMsg()">Send</button>
+    </div>
+
+</div>
+
+
+<script>
+
+function predict() {
+
+    const fileInput = document.getElementById("imageInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select an image");
+        return;
+    }
+
+    document.getElementById("preview").src = URL.createObjectURL(file);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    fetch("http://localhost:5000/predict", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+ .then(data => {
+
+    const result = document.getElementById("result");
+
+    // 🔥 Hide confidence if unknown
+    if (data.prediction === "Unknown") {
+        result.innerHTML = "Prediction: Unknown";
+    }
+    else {
+        result.innerHTML =
+            "Prediction: " + data.prediction +
+            "<br>Confidence: " + (data.confidence * 100).toFixed(2) + "%";
+    }
+
+    // chatbot reply
+    const box = document.getElementById("chatbox");
+    box.innerHTML += "<p><b>Bot:</b> " + data.chat_reply + "</p>";
+})
+
+
+    .catch(err => console.error(err));
+}
+
+
+function sendMsg() {
+
+    const input = document.getElementById("msg");
+    const msg = input.value.trim();
+
+    if (!msg) return;
+
+    const box = document.getElementById("chatbox");
+
+    box.innerHTML += "<p><b>You:</b> " + msg + "</p>";
+
+    fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        box.innerHTML += "<p><b>Bot:</b> " + data.reply + "</p>";
+        box.scrollTop = box.scrollHeight;
+    });
+
+    input.value = "";
+}
+
+</script>
+(

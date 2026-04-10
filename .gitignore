@@ -1,0 +1,27 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Datasets and Large Archives
+dataset/
+*.zip
+*.rar
+*.7z
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Logs
+*.log
+error.log
+
+# Large Media (Optional, but safe to ignore if not needed for core)
+*.mp4
+
+# Editor settings
+.vscode/
+.idea/
